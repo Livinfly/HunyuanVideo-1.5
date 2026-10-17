@@ -1,0 +1,15 @@
+{
+  "generation": {
+    "cfg_distilled": true,
+    "sparse_attn": true,
+    "group_offloading": null,
+    "overlap_group_offloading": true,
+    "dtype": "bf16",
+    "resolution": "720p",
+    "negative_prompt": "",
+    "aspect_ratio": "16:9",
+    "seed": 123,
+    "video_length": 121,
+    "num_inference_steps": 50
+  }
+}

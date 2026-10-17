@@ -611,3 +611,7 @@ GSB（Good/Same/Bad）评估法被广泛用于基于整体视频感知质量来�
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Tencent-Hunyuan/HunyuanVideo-1.5&type=Date1" />
  </picture>
 </a>
+
+## 可复现性能实验
+
+见 [benchmarks/README.md](benchmarks/README.md)：使用 uv 构建环境，运行单卡/多卡、offload on/off 的 E2E 与 DiT 计时，提供仅 E2E 对照、后台进度监控及包含配置和加速比的自动报告。权重、输入和结果路径均可通过参数指定。
