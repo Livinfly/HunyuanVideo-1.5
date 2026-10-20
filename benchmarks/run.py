@@ -51,7 +51,13 @@ def main():
     parser.add_argument('--background', action='store_true')
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--validate-video', action='store_true', help='Also decode saved MP4s to check frames/size/FPS and hash files (outside timing)')
+    parser.add_argument('--sparse-attention', action='store_true',
+                        help='Scope v2: attention input communication through result return/aggregation and output readiness; see sparse_attention.py')
     args = parser.parse_args()
+    if args.sparse_attention:
+        os.environ['VIDEO_BENCH_SPARSE_ATTENTION'] = '1'
+        if 'dit' not in args.modes:
+            parser.error('--sparse-attention requires dit mode')
     if args.warmup < 1 or args.repeats < 1:
         parser.error('Require >= 1 full warmup and >= 1 measured request per mode')
     if any(n < 1 or 16 % n for n in args.gpus):
@@ -159,6 +165,10 @@ def main():
                 wait_for=str(args.wait_for.resolve()) if args.wait_for else None,
                 order='alternate mode order for each repeat; warm up each mode first',
                 pid=os.getpid())
+    plan['sparse_attention_timing'] = os.environ.get('VIDEO_BENCH_SPARSE_ATTENTION') == '1'
+    from sparse_attention import SCOPE, SCOPE_VERSION
+    plan['sparse_attention_scope_version'] = SCOPE_VERSION if plan['sparse_attention_timing'] else None
+    plan['sparse_attention_range'] = SCOPE if plan['sparse_attention_timing'] else None
     write_json(suite / 'plan.json', plan)
     status = dict(status='waiting', pid=os.getpid(), total=len(commands), completed=[], current=None)
     write_status(suite, status)

@@ -174,6 +174,8 @@ def generate_report(suite, baseline=None):
     failures = [r for r in status['completed'] if r['status'] != 'complete']
     lines += ['', f'失败/显存不足组：`{failures}`。未完成组不用于最终加速比或百分比比较。', '',
               '详细记录：[plan.json](plan.json)、[summary.json](summary.json)；各组的 `effective_config.json`、`metrics.json`、`inference.log` 和 MP4 保存在 `offload_{on,off}/gN/`。', '']
+    from sparse_attention import report_lines
+    lines += report_lines(rows)
     (suite / 'report.md').write_text('\n'.join(lines))
     write_json(suite / 'summary.json', dict(status=status['status'], plan=plan,
                results=[{k: v for k, v in row.items() if k not in {'records', 'effective'}} for row in rows],
